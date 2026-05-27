@@ -10,8 +10,7 @@ const initialState = {
 
 export const getNotes = createAsyncThunk('notes/getNotes', async (_, thunkAPI) => {
     try {
-        const token = thunkAPI.getState().auth.token;
-        return await notesService.getNotes(token);
+        return await notesService.getNotes();
     } catch (error) {
         const message =
             (error.response && error.response.data && error.response.data.msg) ||
@@ -23,9 +22,8 @@ export const getNotes = createAsyncThunk('notes/getNotes', async (_, thunkAPI) =
 
 export const addNote = createAsyncThunk('notes/addNote', async (noteData, thunkAPI) => {
     try {
-        const token = thunkAPI.getState().auth.token;
         const encryptedContent = encryptNote(noteData.content);
-        return await notesService.addNote({ content: encryptedContent }, token);
+        return await notesService.addNote({ content: encryptedContent });
     } catch (error) {
         const message =
             (error.response && error.response.data && error.response.data.msg) ||
@@ -37,8 +35,7 @@ export const addNote = createAsyncThunk('notes/addNote', async (noteData, thunkA
 
 export const deleteNote = createAsyncThunk('notes/deleteNote', async (noteId, thunkAPI) => {
     try {
-        const token = thunkAPI.getState().auth.token;
-        return await notesService.deleteNote(noteId, token);
+        return await notesService.deleteNote(noteId);
     } catch (error) {
         const message =
             (error.response && error.response.data && error.response.data.msg) ||
