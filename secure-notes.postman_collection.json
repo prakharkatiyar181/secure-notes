@@ -1,0 +1,294 @@
+{
+	"info": {
+		"_postman_id": "7d5dfc6b-67ea-4bf7-9f22-f3e9c15858cf",
+		"name": "Secure Notes API",
+		"description": "API collection for testing authentication, token refresh, and encrypted notes CRUD operations.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Register User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"user@example.com\",\n    \"password\": \"securePassword123\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/register",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"register"
+							]
+						},
+						"description": "Register a new user account. Returns accessToken and refreshToken."
+					},
+					"response": []
+				},
+				{
+					"name": "Login User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();",
+									"if (response.accessToken) {",
+									"    pm.environment.set(\"accessToken\", response.accessToken);",
+									"}",
+									"if (response.refreshToken) {",
+									"    pm.environment.set(\"refreshToken\", response.refreshToken);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"user@example.com\",\n    \"password\": \"securePassword123\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						},
+						"description": "Authenticate user. Automatically saves accessToken and refreshToken to environment variables."
+					},
+					"response": []
+				},
+				{
+					"name": "Refresh Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();",
+									"if (response.accessToken) {",
+									"    pm.environment.set(\"accessToken\", response.accessToken);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"token\": \"{{refreshToken}}\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/refresh-token",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"refresh-token"
+							]
+						},
+						"description": "Get a new accessToken using the refreshToken."
+					},
+					"response": []
+				},
+				{
+					"name": "Logout User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.environment.unset(\"accessToken\");",
+									"pm.environment.unset(\"refreshToken\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"token\": \"{{refreshToken}}\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/logout",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"logout"
+							]
+						},
+						"description": "Log out the user, invalidating the refresh token on the database."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Notes",
+			"item": [
+				{
+					"name": "Get All Notes",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "{{accessToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/notes",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"notes"
+							]
+						},
+						"description": "Get all notes for the authenticated user."
+					},
+					"response": []
+				},
+				{
+					"name": "Create Note",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "{{accessToken}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"content\": \"U2FsdGVkX19G4T9X9G4T9X... (Encrypted content using crypto-js locally)\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/notes",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"notes"
+							]
+						},
+						"description": "Create a new encrypted note."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Note",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "{{accessToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/notes/:id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"notes",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1",
+									"description": "The unique note ID to delete"
+								}
+							]
+						},
+						"description": "Delete a note by ID."
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:5000",
+			"type": "string"
+		}
+	]
+}
