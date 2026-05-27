@@ -34,15 +34,19 @@ const NoteList = () => {
     return (
         <Box>
             <TransitionGroup>
-                {filteredNotes.map((note) => (
-                    <CSSTransition
-                        key={note.id}
-                        timeout={300}
-                        classNames="note"
-                    >
-                        <NoteItem note={note} />
-                    </CSSTransition>
-                ))}
+                {filteredNotes.map((note) => {
+                    const nodeRef = React.createRef(null);
+                    return (
+                        <CSSTransition
+                            key={note.id}
+                            nodeRef={nodeRef}
+                            timeout={300}
+                            classNames="note"
+                        >
+                            <NoteItem ref={nodeRef} note={note} />
+                        </CSSTransition>
+                    )
+                })}
             </TransitionGroup>
         </Box>
     );
