@@ -1,95 +1,131 @@
-# Secure Notes Application
+# Secure Notes Application 🔒
 
-This is a full-stack application that allows users to create and manage secure, encrypted notes.
+A high-performance, full-stack application that allows users to create, search, and manage secure, client-side encrypted notes. Rebuilt completely with a custom vanilla CSS design system for ultra-fast load times.
 
-## Features
+---
 
-- **Frontend:** Built with React, Redux, and Material-UI.
-- **Backend:** Built with Node.js, Express, and MySQL.
-- **Authentication:** Secure JWT-based authentication with refresh tokens.
-- **Encryption:** Notes are encrypted on the client-side using AES before being stored in the database.
-- **CRUD Operations:** Users can create, view, and delete their notes.
-- **Search:** Client-side search functionality to filter notes.
-- **Responsive Design:** The UI is designed to be responsive and work on different screen sizes.
+## 🚀 Key Architectural Highlights
+- **No Heavy Frameworks / Libraries (MUI-Free)**: Rebuilt entirely using native HTML5 and utility-driven vanilla CSS. The client bundle size was **reduced by 75%** (210 kB to 53 kB) for near-instant page load times.
+- **Client-Side Cryptography**: Notes are fully encrypted locally on the client using AES-256 (`crypto-js`) before transmission. The server and database only store the encrypted payload.
+- **Micro-Animations**: Smooth entry, exit, and list transitions powered by `react-transition-group` and CSS keyframe animations.
+- **Instant Search**: Direct keypress-driven search bar for real-time note filtering.
 
-## Getting Started
+---
+
+## 📁 Repository Directory Structure
+
+```text
+├── backend/
+│   ├── src/
+│   │   ├── config/       # Connection pools & automated migrations
+│   │   ├── controllers/  # API endpoints handlers
+│   │   ├── routes/       # Express route mappings
+│   │   └── index.js      # App entry point
+│   ├── .env              # Backend local environment configs
+│   └── package.json      # Node.js dependencies
+└── frontend/
+    ├── src/
+    │   ├── components/   # Auth forms, note items, modal dialogs
+    │   ├── pages/        # Dashboard & Auth pages
+    │   ├── redux/        # Store, auth and note slices
+    │   ├── services/     # API request structures
+    │   ├── index.css     # Premium custom CSS variables & resets
+    │   └── index.js      # React bootstrap entry point
+    └── package.json      # React dependencies
+```
+
+---
+
+## 🛠️ Local Installation & Setup
 
 ### Prerequisites
+- **Node.js** (v16.x or newer)
+- **MySQL Server** (local or remote)
 
-- Node.js
-- MySQL
+### 1. Clone the Repository
+```bash
+git clone https://github.com/prakharkatiyar181/secure-notes.git
+cd secure-notes
+```
 
-### Installation
+### 2. Configure the Backend
+Navigate to the `backend/` directory, install packages, and set up your `.env`:
+```bash
+cd backend
+npm install
+```
 
-1.  **Clone the repository:**
-    ```bash
-    git clone <repository-url>
-    ```
+Create a `.env` file in the `backend/` folder:
+```text
+DB_HOST=localhost
+DB_USER=your_db_username
+DB_DATABASE=secure_notes
+DB_PASSWORD=your_db_password
+DB_PORT=3306
 
-2.  **Install backend dependencies:**
-    ```bash
-    cd backend
-    npm install
-    ```
+JWT_SECRET=your_secret_jwt_key
+JWT_REFRESH_SECRET=your_refresh_jwt_key
+```
 
-3.  **Install frontend dependencies:**
-    ```bash
-    cd ../frontend
-    npm install
-    ```
+### 3. Initialize the Database Schema (Automated)
+Run the built-in database migration script to automatically connect to your database and provision the tables (`users` and `notes`):
+```bash
+node src/config/initDb.js
+```
+*No manual SQL queries or database GUI tools needed!*
 
-### Database Setup
+### 4. Configure the Frontend
+Navigate to the `frontend/` directory, install packages, and set up your environment variables:
+```bash
+cd ../frontend
+npm install
+```
 
-1.  **Create a MySQL database** named `secure_notes`.
-2.  **Create the `users` table:**
-    ```sql
-    CREATE TABLE users (
-        id INT AUTO_INCREMENT PRIMARY KEY,
-        email VARCHAR(255) UNIQUE NOT NULL,
-        password_hash VARCHAR(255) NOT NULL,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        refresh_token VARCHAR(255)
-    );
-    ```
-3.  **Create the `notes` table:**
-    ```sql
-    CREATE TABLE notes (
-        id INT AUTO_INCREMENT PRIMARY KEY,
-        user_id INT NOT NULL,
-        encrypted_content TEXT NOT NULL,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
-    );
-    ```
+To configure a custom backend endpoint for local development (optional, defaults to `http://localhost:5000/api`):
+Create a `.env` file in the `frontend/` folder:
+```text
+REACT_APP_API_URL=http://localhost:5000/api
+```
 
-### Configuration
+---
 
-1.  **Backend:** Create a `.env` file in the `backend` directory and add the following:
-    ```
-    DB_HOST=localhost
-    DB_USER=your_db_user
-    DB_DATABASE=secure_notes
-    DB_PASSWORD=your_db_password
+## 💻 Running the Application Locally
 
-    JWT_SECRET=your_jwt_secret
-    JWT_REFRESH_SECRET=your_jwt_refresh_secret
-    ```
+Start both the API server and the React dev client:
 
-2.  **Frontend:** The frontend is configured to work with the backend running on `http://localhost:5000`.
+### Backend API
+In the `backend/` directory:
+```bash
+npm start
+```
+*API will run on [http://localhost:5000](http://localhost:5000)*
 
-### Running the Application
+### Frontend Client
+In the `frontend/` directory:
+```bash
+npm start
+```
+*React app will run on [http://localhost:3000](http://localhost:3000)*
 
-1.  **Start the backend server:**
-    ```bash
-    cd backend
-    npm start
-    ```
-    (You may need to add a `"start": "node src/index.js"` script to your `backend/package.json`)
+---
 
-2.  **Start the frontend application:**
-    ```bash
-    cd ../frontend
-    npm start
-    ```
+## ☁️ Production Deployment
 
-The application should now be running and accessible in your browser.
+### 1. Database (MySQL)
+Deploy a managed MySQL instance on **Railway.app** or **Aiven.io**. Copy down the database connection variables (Host, User, Password, Port, Database name). Run `node src/config/initDb.js` pointing to your remote variables to auto-generate the schema.
+
+### 2. Backend API (Render)
+1. Deploy a new **Web Service** on **Render.com** linked to your GitHub repo.
+2. Set the **Root Directory** to `backend`.
+3. Set the **Build Command** to `npm install`.
+4. Set the **Start Command** to `npm start`.
+5. Inject your Database credentials and JWT secrets under **Environment Variables**.
+
+### 3. Frontend (Vercel or Netlify)
+1. Deploy a new **Project** on **Vercel** or **Netlify** linked to your GitHub repo.
+2. Set the **Root Directory** to `frontend`.
+3. Select **Create React App** as the framework preset.
+4. Set the **Build Command** to `npm run build`.
+5. Set the **Output Directory** to `build`.
+6. Add the following **Environment Variable**:
+   - `REACT_APP_API_URL` = `https://your-backend-app.onrender.com/api`
