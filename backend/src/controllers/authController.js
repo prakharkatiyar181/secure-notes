@@ -34,15 +34,13 @@ const register = async (req, res) => {
             },
         };
 
-        jwt.sign(
-            payload,
-            process.env.JWT_SECRET,
-            { expiresIn: 3600 },
-            (err, token) => {
-                if (err) throw err;
-                res.json({ token });
-            }
-        );
+        const accessToken = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '15m' });
+        const refreshToken = jwt.sign(payload, process.env.JWT_REFRESH_SECRET, { expiresIn: '7d' });
+
+        await pool.query('UPDATE users SET refresh_token = ? WHERE id = ?', [refreshToken, insertedId]);
+
+
+        res.json({ accessToken, refreshToken });
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Server error');
@@ -78,22 +76,67 @@ const login = async (req, res) => {
             },
         };
 
-        jwt.sign(
-            payload,
-            process.env.JWT_SECRET,
-            { expiresIn: 3600 },
-            (err, token) => {
-                if (err) throw err;
-                res.json({ token });
-            }
-        );
+        const accessToken = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '15m' });
+        const refreshToken = jwt.sign(payload, process.env.JWT_REFRESH_SECRET, { expiresIn: '7d' });
+
+        await pool.query('UPDATE users SET refresh_token = ? WHERE id = ?', [refreshToken, user.id]);
+
+        res.json({ accessToken, refreshToken });
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Server error');
     }
 };
 
+const refreshToken = (req, res) => {
+    const { token } = req.body;
+
+    if (!token) {
+        return res.sendStatus(401);
+    }
+
+    pool.query('SELECT * FROM users WHERE refresh_token = ?', [token])
+        .then(([users]) => {
+            if (users.length === 0) {
+                return res.sendStatus(403);
+            }
+
+            jwt.verify(token, process.env.JWT_REFRESH_SECRET, (err, user) => {
+                if (err) {
+                    return res.sendStatus(403);
+                }
+
+                const payload = {
+                    user: {
+                        id: user.user.id,
+                    },
+                };
+
+                const accessToken = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '15m' });
+
+                res.json({ accessToken });
+            });
+        })
+        .catch(err => {
+            console.error(err.message);
+            res.status(500).send('Server error');
+        });
+};
+
+
+const logout = async (req, res) => {
+    // client should send the refresh token
+    const { token } = req.body;
+    if (token) {
+        await pool.query('UPDATE users SET refresh_token = NULL WHERE refresh_token = ?', [token]);
+    }
+    res.json({ msg: 'Logout successful' });
+};
+
+
 module.exports = {
     register,
     login,
+    refreshToken,
+    logout,
 };
