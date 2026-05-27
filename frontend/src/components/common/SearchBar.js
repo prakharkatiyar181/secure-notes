@@ -5,10 +5,20 @@ import SearchIcon from '@mui/icons-material/Search';
 const SearchBar = ({ onSearch }) => {
     return (
         <TextField
-            fullWidth
             variant="outlined"
-            placeholder="Search..."
+            placeholder="Search"
             onChange={(e) => onSearch(e.target.value)}
+            sx={{
+                width: '300px',
+                '& .MuiOutlinedInput-root': {
+                    bgcolor: 'white',
+                    borderRadius: 2,
+                    boxShadow: '0 2px 4px rgba(0,0,0,0.05)',
+                    '& fieldset': {
+                        border: 'none',
+                    },
+                },
+            }}
             InputProps={{
                 startAdornment: (
                     <InputAdornment position="start">
@@ -16,7 +26,6 @@ const SearchBar = ({ onSearch }) => {
                     </InputAdornment>
                 ),
             }}
-            sx={{ mb: 2 }}
         />
     );
 };

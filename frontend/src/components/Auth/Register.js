@@ -31,21 +31,19 @@ const Register = () => {
 
   return (
     <Box component="form" onSubmit={onSubmit} noValidate sx={{ mt: 1 }}>
-      <Typography component="h1" variant="h5">
-        Register
-      </Typography>
-      {message && <Alert severity="error">{message}</Alert>}
-      {error && <Alert severity="error">{error}</Alert>}
+      {message && <Alert severity="error" sx={{ mb: 2 }}>{message}</Alert>}
+      {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
       <TextField
         margin="normal"
         required
         fullWidth
         id="email"
-        label="Email Address"
+        label="Email"
         name="email"
         autoComplete="email"
         value={email}
         onChange={onChange}
+        variant="outlined"
       />
       <TextField
         margin="normal"
@@ -57,6 +55,7 @@ const Register = () => {
         id="password"
         value={password}
         onChange={onChange}
+        variant="outlined"
       />
       <TextField
         margin="normal"
@@ -68,6 +67,7 @@ const Register = () => {
         id="password2"
         value={password2}
         onChange={onChange}
+        variant="outlined"
       />
       <Button
         type="submit"
@@ -76,7 +76,7 @@ const Register = () => {
         sx={{ mt: 3, mb: 2 }}
         disabled={loading}
       >
-        {loading ? <CircularProgress size={24} /> : 'Sign Up'}
+        {loading ? <CircularProgress size={24} color="inherit" /> : 'Register'}
       </Button>
     </Box>
   );

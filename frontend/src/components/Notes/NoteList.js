@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { getNotes } from '../../redux/slices/notesSlice';
 import NoteItem from './NoteItem';
 import { decryptNote } from '../../utils/encryption';
-import { List, CircularProgress, Alert } from '@mui/material';
+import { Box, CircularProgress, Alert } from '@mui/material';
 
 const NoteList = () => {
     const dispatch = useDispatch();
@@ -31,11 +31,11 @@ const NoteList = () => {
     }
 
     return (
-        <List>
+        <Box>
             {filteredNotes.map((note) => (
                 <NoteItem key={note.id} note={note} />
             ))}
-        </List>
+        </Box>
     );
 };
 

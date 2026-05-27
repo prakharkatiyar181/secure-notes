@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { login } from '../../redux/slices/authSlice';
-import { Box, TextField, Button, Typography, CircularProgress, Alert } from '@mui/material';
+import { Box, TextField, Button, Typography, CircularProgress, Alert, Link } from '@mui/material';
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -23,21 +23,19 @@ const Login = () => {
 
   return (
     <Box component="form" onSubmit={onSubmit} noValidate sx={{ mt: 1 }}>
-      <Typography component="h1" variant="h5">
-        Login
-      </Typography>
-      {error && <Alert severity="error">{error}</Alert>}
+      {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
       <TextField
         margin="normal"
         required
         fullWidth
         id="email"
-        label="Email Address"
+        label="Email"
         name="email"
         autoComplete="email"
         autoFocus
         value={email}
         onChange={onChange}
+        variant="outlined"
       />
       <TextField
         margin="normal"
@@ -50,6 +48,7 @@ const Login = () => {
         autoComplete="current-password"
         value={password}
         onChange={onChange}
+        variant="outlined"
       />
       <Button
         type="submit"
@@ -58,8 +57,11 @@ const Login = () => {
         sx={{ mt: 3, mb: 2 }}
         disabled={loading}
       >
-        {loading ? <CircularProgress size={24} /> : 'Sign In'}
+        {loading ? <CircularProgress size={24} color="inherit" /> : 'Login'}
       </Button>
+      <Link href="#" variant="body2" sx={{ display: 'block', textAlign: 'center' }}>
+        Forgot password?
+      </Link>
     </Box>
   );
 };

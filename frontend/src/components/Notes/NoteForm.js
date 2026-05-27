@@ -1,40 +1,24 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { addNote } from '../../redux/slices/notesSlice';
-import { Box, TextField, Button } from '@mui/material';
+import { Button } from '@mui/material';
 
+// For now, clicking the button will add a hardcoded note.
+// In a real app, this would open a modal with a form.
 const NoteForm = () => {
-    const [content, setContent] = useState('');
     const dispatch = useDispatch();
 
-    const onSubmit = (e) => {
-        e.preventDefault();
-        dispatch(addNote({ content }));
-        setContent('');
+    const onAddNote = () => {
+        dispatch(addNote({ content: 'New Note' }));
     };
 
     return (
-        <Box component="form" onSubmit={onSubmit} noValidate sx={{ mt: 1 }}>
-            <TextField
-                margin="normal"
-                required
-                fullWidth
-                id="content"
-                label="New Note"
-                name="content"
-                autoFocus
-                value={content}
-                onChange={(e) => setContent(e.target.value)}
-            />
-            <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                sx={{ mt: 3, mb: 2 }}
-            >
-                Add Note
-            </Button>
-        </Box>
+        <Button
+            variant="contained"
+            onClick={onAddNote}
+        >
+            Add Note
+        </Button>
     );
 };
 
