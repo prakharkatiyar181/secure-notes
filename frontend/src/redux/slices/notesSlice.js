@@ -52,7 +52,11 @@ export const deleteNote = createAsyncThunk('notes/deleteNote', async (noteId, th
 const notesSlice = createSlice({
     name: 'notes',
     initialState,
-    reducers: {},
+    reducers: {
+        setSearchTerm: (state, action) => {
+            state.searchTerm = action.payload;
+        },
+    },
     extraReducers: (builder) => {
         builder
             .addCase(getNotes.pending, (state) => {
@@ -61,6 +65,7 @@ const notesSlice = createSlice({
             .addCase(getNotes.fulfilled, (state, action) => {
                 state.loading = false;
                 state.notes = action.payload;
+                state.searchTerm = '';
             })
             .addCase(getNotes.rejected, (state, action) => {
                 state.loading = false;
@@ -91,4 +96,5 @@ const notesSlice = createSlice({
     },
 });
 
+export const { setSearchTerm } = notesSlice.actions;
 export default notesSlice.reducer;
