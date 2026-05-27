@@ -127,5 +127,19 @@ Deploy a managed MySQL instance on **Railway.app** or **Aiven.io**. Copy down th
 3. Select **Create React App** as the framework preset.
 4. Set the **Build Command** to `npm run build`.
 5. Set the **Output Directory** to `build`.
-6. Add the following **Environment Variable**:
    - `REACT_APP_API_URL` = `https://your-backend-app.onrender.com/api`
+
+---
+
+## 📬 Postman API Integration & Testing
+
+We have included a complete Postman collection v2.1.0 in the root of the project: [secure-notes.postman_collection.json](file:///d:/PROJECTS/secure-notes/secure-notes.postman_collection.json).
+
+### How to Import and Use:
+1. Open the **Postman** desktop application or web client.
+2. Click **Import** in the top left corner.
+3. Drag and drop the `secure-notes.postman_collection.json` file from the root directory into the upload box (or choose **File** and select it).
+4. Configure your `baseUrl` variable to point either to:
+   - Local development: `http://localhost:5000`
+   - Production API: `https://secure-notes-g5ax.onrender.com`
+5. **Zero-friction Testing**: Calling the **Login User** request automatically extracts the `accessToken` and `refreshToken` and saves them to your environment. All subsequent requests (like creating or deleting notes) will automatically inject the token headers without any manual copy-paste!
