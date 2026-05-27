@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { getNotes } from '../../redux/slices/notesSlice';
 import NoteItem from './NoteItem';
 import { decryptNote } from '../../utils/encryption';
-import { Box, CircularProgress, Alert } from '@mui/material';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 
 const NoteList = () => {
@@ -15,40 +14,47 @@ const NoteList = () => {
     }, [dispatch]);
 
     const filteredNotes = useMemo(() => {
+        const notesWithRefs = notes.map(note => ({
+            ...note,
+            nodeRef: React.createRef(null)
+        }));
+
         if (!searchTerm) {
-            return notes;
+            return notesWithRefs;
         }
-        return notes.filter(note =>
+
+        return notesWithRefs.filter(note =>
             decryptNote(note.encrypted_content).toLowerCase().includes(searchTerm.toLowerCase())
         );
     }, [notes, searchTerm]);
 
     if (loading) {
-        return <CircularProgress />;
+        return (
+            <div style={{ display: 'flex', justifyContent: 'center', padding: '32px' }}>
+                <div className="spinner spinner-dark"></div>
+            </div>
+        );
     }
 
     if (error) {
-        return <Alert severity="error">{error}</Alert>;
+        return <div className="alert alert-error">{error}</div>;
     }
 
     return (
-        <Box>
+        <div className="notes-wrapper" style={{ position: 'relative', height: 'calc(100vh - 580px)', overflowY: 'auto' }}>
             <TransitionGroup>
-                {filteredNotes.map((note) => {
-                    const nodeRef = React.createRef(null);
-                    return (
-                        <CSSTransition
-                            key={note.id}
-                            nodeRef={nodeRef}
-                            timeout={300}
-                            classNames="note"
-                        >
-                            <NoteItem ref={nodeRef} note={note} />
-                        </CSSTransition>
-                    )
-                })}
+                {filteredNotes.map((note) => (
+                    <CSSTransition
+                        key={note.id}
+                        nodeRef={note.nodeRef}
+                        timeout={300}
+                        classNames="note"
+                    >
+                        <NoteItem ref={note.nodeRef} note={note} />
+                    </CSSTransition>
+                ))}
             </TransitionGroup>
-        </Box>
+        </div>
     );
 };
 

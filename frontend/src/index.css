@@ -1,10 +1,584 @@
-/* Animations for note deletion */
-.note-exit {
-    opacity: 1;
-    transform: translateX(0);
+/* ==========================================
+   DESIGN SYSTEM & CUSTOM PROPERTIES
+   ========================================== */
+:root {
+  --primary: #3a8dff;
+  --primary-hover: #2675e0;
+  --primary-light: #ebf3ff;
+  --error: #e63946;
+  --error-bg: #ffeef0;
+  --error-border: #fca5a5;
+  --bg-default: #f4f6f8;
+  --bg-paper: #ffffff;
+  --text-primary: #212529;
+  --text-secondary: #6c757d;
+  --border-color: #e2e8f0;
+  --border-focus: #3a8dff;
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.05);
+  --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.08);
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }
+
+/* ==========================================
+   BASE RESETS & GLOBALS
+   ========================================== */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-default);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+button, input, textarea {
+  font-family: inherit;
+  font-size: inherit;
+  outline: none;
+}
+
+/* ==========================================
+   LAYOUTS & WRAPPERS
+   ========================================== */
+.screen-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 16px;
+  background-color: var(--bg-default);
+}
+
+.auth-card-wrapper {
+  width: 100%;
+  max-width: 400px;
+}
+
+.dashboard-card-wrapper {
+  width: 100%;
+  max-width: 600px;
+}
+
+.card {
+  background-color: var(--bg-paper);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+}
+
+.card-body {
+  padding: 24px;
+}
+
+.flex-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* ==========================================
+   TYPOGRAPHY
+   ========================================== */
+.title-center {
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 24px;
+}
+
+/* ==========================================
+   TABS SWITCHER (CAPSULE/PILL DESIGN)
+   ========================================== */
+.tabs-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+
+.tabs-flex {
+  display: flex;
+  width: 220px;
+  background-color: #f8f9fa;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.tab-btn {
+  flex: 1;
+  border: none;
+  background: transparent;
+  height: 38px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.tab-btn:hover {
+  background-color: #e9ecef;
+}
+
+.tab-btn.active {
+  background-color: var(--primary);
+  color: #ffffff;
+}
+
+.tab-btn.active:hover {
+  background-color: var(--primary);
+}
+
+/* ==========================================
+   INPUTS & LABELS
+   ========================================== */
+.form-group {
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.input-field {
+  width: 100%;
+  height: 44px;
+  padding: 0 14px;
+  border: 1px solid #ced4da;
+  border-radius: var(--radius-md);
+  background-color: #ffffff;
+  transition: var(--transition);
+  color: var(--text-primary);
+}
+
+.input-field:focus {
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 3px rgba(58, 141, 255, 0.15);
+}
+
+.textarea-field {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #ced4da;
+  border-radius: var(--radius-md);
+  background-color: #ffffff;
+  transition: var(--transition);
+  color: var(--text-primary);
+  resize: vertical;
+}
+
+.textarea-field:focus {
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 3px rgba(58, 141, 255, 0.15);
+}
+
+/* ==========================================
+   BUTTONS
+   ========================================== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 44px;
+  padding: 0 20px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  border-radius: var(--radius-md);
+  border: none;
+  cursor: pointer;
+  transition: var(--transition);
+  text-decoration: none;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background-color: var(--primary);
+  color: #ffffff;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background-color: var(--primary-hover);
+}
+
+.btn-outline {
+  background-color: #ffffff;
+  color: var(--text-primary);
+  border: 1px solid #ced4da;
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-outline:hover:not(:disabled) {
+  border-color: #adb5bd;
+  background-color: #f8f9fa;
+}
+
+.btn-compact {
+  height: 38px;
+  padding: 0 16px;
+  font-size: 0.9rem;
+}
+
+.btn-fullWidth {
+  width: 100%;
+}
+
+.link-center {
+  display: block;
+  text-align: center;
+  font-size: 0.875rem;
+  color: var(--primary);
+  text-decoration: none;
+  margin-top: 16px;
+  transition: var(--transition);
+}
+
+.link-center:hover {
+  text-decoration: underline;
+}
+
+/* ==========================================
+   ALERTS
+   ========================================== */
+.alert {
+  padding: 12px 16px;
+  border-radius: var(--radius-md);
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-bottom: 16px;
+}
+
+.alert-error {
+  background-color: var(--error-bg);
+  border: 1px solid var(--error-border);
+  color: var(--error);
+}
+
+/* ==========================================
+   SPINNERS & LOADERS
+   ========================================== */
+.spinner {
+  width: 22px;
+  height: 22px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: #ffffff;
+  animation: spin 0.8s linear infinite;
+}
+
+.spinner-dark {
+  border: 3px solid rgba(0, 0, 0, 0.1);
+  border-top-color: var(--primary);
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ==========================================
+   HEADER COMPONENT
+   ========================================== */
+.main-header {
+  background-color: var(--primary);
+  color: #ffffff;
+  padding: 14px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.logout-btn {
+  background: transparent;
+  border: none;
+  color: #ffffff;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  opacity: 0.9;
+  transition: var(--transition);
+}
+
+.logout-btn:hover {
+  opacity: 1;
+}
+
+.logout-icon {
+  width: 24px;
+  height: 24px;
+  fill: currentColor;
+}
+
+/* ==========================================
+   INTERACTIVE SEARCH BAR
+   ========================================== */
+.search-container {
+  width: 300px;
+}
+
+.search-placeholder-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 38px;
+  padding: 0 16px;
+  background-color: #f1f3f5;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  color: var(--text-secondary);
+  transition: var(--transition);
+}
+
+.search-placeholder-box:hover {
+  background-color: #e9ecef;
+}
+
+.search-icon-svg {
+  width: 16px;
+  height: 16px;
+  stroke: var(--text-secondary);
+  stroke-width: 2.5;
+  fill: none;
+}
+
+.search-placeholder-text {
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.search-active-form {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.search-input-field {
+  flex-grow: 1;
+  height: 38px;
+  padding: 0 12px;
+  border: 1px solid #ced4da;
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
+  transition: var(--transition);
+}
+
+.search-input-field:focus {
+  border-color: var(--primary);
+}
+
+/* ==========================================
+   NOTE LIST & ITEM CARDS
+   ========================================== */
+.notes-wrapper {
+  margin-top: 8px;
+}
+
+.note-card {
+  background-color: #ffffff;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  margin-bottom: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+}
+
+.note-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+.note-card-content {
+  flex-grow: 1;
+  padding-right: 16px;
+}
+
+.note-card-title {
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin-bottom: 4px;
+  color: var(--text-primary);
+}
+
+.note-card-body {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
+  white-space: pre-wrap;
+}
+
+.note-delete-btn {
+  background: transparent;
+  border: none;
+  color: #adb5bd;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+}
+
+.note-delete-btn:hover {
+  color: var(--error);
+  background-color: #fff0f1;
+}
+
+.trash-icon-svg {
+  width: 20px;
+  height: 20px;
+  stroke: currentColor;
+  stroke-width: 2;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ==========================================
+   CUSTOM DIALOG MODAL (PREMIUM & LIGHTWEIGHT)
+   ========================================== */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(4px);
+}
+
+.modal-dialog {
+  background-color: #ffffff;
+  border-radius: var(--radius-lg);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  width: 100%;
+  max-width: 440px;
+  overflow: hidden;
+  animation: slideUp 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid var(--border-color);
+}
+
+.modal-header {
+  padding: 20px 24px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.modal-header-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.modal-close-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+}
+
+.modal-close-btn:hover {
+  background-color: #f1f3f5;
+  color: var(--text-primary);
+}
+
+.close-icon-svg {
+  width: 20px;
+  height: 20px;
+  stroke: currentColor;
+  stroke-width: 2;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.modal-body {
+  padding: 24px;
+}
+
+.modal-footer {
+  padding: 16px 24px 20px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  background-color: #f8f9fa;
+  border-top: 1px solid var(--border-color);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* ==========================================
+   TRANSITION GROUP STYLING (react-transition-group)
+   ========================================== */
+.note-enter {
+  opacity: 0;
+  transform: translateY(15px);
+}
+
+.note-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 300ms cubic-bezier(0.4, 0, 0.2, 1), transform 300ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.note-exit {
+  opacity: 1;
+  transform: scale(1);
+}
+
 .note-exit-active {
-    opacity: 0;
-    transform: translateX(-100%);
-    transition: opacity 300ms, transform 300ms;
+  opacity: 0;
+  transform: scale(0.95);
+  transition: opacity 250ms cubic-bezier(0.4, 0, 0.2, 1), transform 250ms cubic-bezier(0.4, 0, 0.2, 1);
 }

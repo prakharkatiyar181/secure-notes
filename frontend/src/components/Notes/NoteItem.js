@@ -2,8 +2,6 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import { deleteNote } from '../../redux/slices/notesSlice';
 import { decryptNote } from '../../utils/encryption';
-import { Paper, Typography, IconButton, Box } from '@mui/material';
-import DeleteIcon from '@mui/icons-material/Delete';
 
 const NoteItem = React.forwardRef(({ note }, ref) => {
     const dispatch = useDispatch();
@@ -12,15 +10,22 @@ const NoteItem = React.forwardRef(({ note }, ref) => {
     const preview = body.join('\n');
 
     return (
-        <Paper ref={ref} sx={{ p: 2, mb: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <Box>
-                <Typography variant="h6" component="h3" sx={{ fontWeight: 600 }}>{title}</Typography>
-                <Typography variant="body2" color="text.secondary">{preview}</Typography>
-            </Box>
-            <IconButton edge="end" aria-label="delete" onClick={() => dispatch(deleteNote(note.id))}>
-                <DeleteIcon />
-            </IconButton>
-        </Paper>
+        <div ref={ref} className="note-card">
+            <div className="note-card-content">
+                <h3 className="note-card-title">{title}</h3>
+                <p className="note-card-body">{preview}</p>
+            </div>
+            <button 
+                type="button"
+                className="note-delete-btn" 
+                aria-label="delete" 
+                onClick={() => dispatch(deleteNote(note.id))}
+            >
+                <svg className="trash-icon-svg" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z" />
+                </svg>
+            </button>
+        </div>
     );
 });
 

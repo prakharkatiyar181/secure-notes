@@ -69,25 +69,21 @@ const notesSlice = createSlice({
                 state.error = action.payload;
             })
             .addCase(addNote.pending, (state) => {
-                state.loading = true;
+                state.error = null;
             })
             .addCase(addNote.fulfilled, (state, action) => {
-                state.loading = false;
                 state.notes.push(action.payload);
             })
             .addCase(addNote.rejected, (state, action) => {
-                state.loading = false;
                 state.error = action.payload;
             })
             .addCase(deleteNote.pending, (state) => {
-                state.loading = true;
+                state.error = null;
             })
             .addCase(deleteNote.fulfilled, (state, action) => {
-                state.loading = false;
                 state.notes = state.notes.filter((note) => note.id !== action.meta.arg);
             })
             .addCase(deleteNote.rejected, (state, action) => {
-                state.loading = false;
                 state.error = action.payload;
             });
     },

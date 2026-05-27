@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { register } from '../../redux/slices/authSlice';
-import { Box, TextField, Button, Typography, CircularProgress, Alert } from '@mui/material';
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -12,7 +11,6 @@ const Register = () => {
   const [message, setMessage] = useState('');
   const dispatch = useDispatch();
   const { loading, error } = useSelector((state) => state.auth);
-
 
   const { email, password, password2 } = formData;
 
@@ -30,55 +28,65 @@ const Register = () => {
   };
 
   return (
-    <Box component="form" onSubmit={onSubmit} noValidate sx={{ mt: 1 }}>
-      {message && <Alert severity="error" sx={{ mb: 2 }}>{message}</Alert>}
-      {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
-      <TextField
-        margin="normal"
-        required
-        fullWidth
-        id="email"
-        label="Email"
-        name="email"
-        autoComplete="email"
-        value={email}
-        onChange={onChange}
-        variant="outlined"
-      />
-      <TextField
-        margin="normal"
-        required
-        fullWidth
-        name="password"
-        label="Password"
-        type="password"
-        id="password"
-        value={password}
-        onChange={onChange}
-        variant="outlined"
-      />
-      <TextField
-        margin="normal"
-        required
-        fullWidth
-        name="password2"
-        label="Confirm Password"
-        type="password"
-        id="password2"
-        value={password2}
-        onChange={onChange}
-        variant="outlined"
-      />
-      <Button
+    <form onSubmit={onSubmit} noValidate style={{ marginTop: '8px' }}>
+      {(message || error) && (
+        <div className="alert alert-error">
+          {message || error}
+        </div>
+      )}
+
+      <div className="form-group">
+        <label htmlFor="email" className="form-label">Email</label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          required
+          autoComplete="email"
+          value={email}
+          onChange={onChange}
+          className="input-field"
+          placeholder="email@example.com"
+        />
+      </div>
+
+      <div className="form-group">
+        <label htmlFor="password" className="form-label">Password</label>
+        <input
+          type="password"
+          id="password"
+          name="password"
+          required
+          value={password}
+          onChange={onChange}
+          className="input-field"
+          placeholder="••••••••"
+        />
+      </div>
+
+      <div className="form-group">
+        <label htmlFor="password2" className="form-label">Confirm Password</label>
+        <input
+          type="password"
+          id="password2"
+          name="password2"
+          required
+          value={password2}
+          onChange={onChange}
+          className="input-field"
+          placeholder="••••••••"
+        />
+      </div>
+
+      <button
         type="submit"
-        fullWidth
-        variant="contained"
-        sx={{ mt: 3, mb: 2 }}
+        className="btn btn-primary btn-fullWidth"
+        style={{ marginTop: '24px', marginBottom: '12px' }}
         disabled={loading}
       >
-        {loading ? <CircularProgress size={24} color="inherit" /> : 'Register'}
-      </Button>
-    </Box>
+        {loading ? <div className="spinner"></div> : 'Register'}
+      </button>
+    </form>
   );
 };
 

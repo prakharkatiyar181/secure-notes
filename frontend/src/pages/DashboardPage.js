@@ -6,7 +6,6 @@ import NoteList from '../components/Notes/NoteList';
 import SearchBar from '../components/common/SearchBar';
 import NoteModal from '../components/Notes/NoteModal';
 import { setSearchTerm } from '../redux/slices/notesSlice';
-import { Container, Paper, Box } from '@mui/material';
 
 const DashboardPage = () => {
   const dispatch = useDispatch();
@@ -20,21 +19,19 @@ const DashboardPage = () => {
   };
 
   return (
-    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', bgcolor: '#f4f6f8', py: 4, px: 2 }}>
-      <Container component="main" maxWidth="sm" sx={{ p: '0 !important' }}>
-        <Paper sx={{ overflow: 'hidden', borderRadius: 3, boxShadow: '0 8px 40px rgba(0,0,0,0.08)', bgcolor: 'white' }}>
-          <Header />
-          <Box sx={{ p: 3 }}>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
-              <NoteForm handleOpen={handleOpen} />
-              <SearchBar onSearch={handleSearch} />
-            </Box>
-            <NoteList />
-          </Box>
-        </Paper>
-        <NoteModal open={open} handleClose={handleClose} />
-      </Container>
-    </Box>
+    <div className="screen-center">
+      <div className="dashboard-card-wrapper card">
+        <Header />
+        <div className="card-body">
+          <div className="flex-between" style={{ marginBottom: '24px' }}>
+            <NoteForm handleOpen={handleOpen} />
+            <SearchBar onSearch={handleSearch} />
+          </div>
+          <NoteList />
+        </div>
+      </div>
+      <NoteModal open={open} handleClose={handleClose} />
+    </div>
   );
 };
 

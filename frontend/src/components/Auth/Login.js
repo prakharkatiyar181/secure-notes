@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { login } from '../../redux/slices/authSlice';
-import { Box, TextField, Button, Typography, CircularProgress, Alert, Link } from '@mui/material';
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -22,47 +21,58 @@ const Login = () => {
   };
 
   return (
-    <Box component="form" onSubmit={onSubmit} noValidate sx={{ mt: 1 }}>
-      {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
-      <TextField
-        margin="normal"
-        required
-        fullWidth
-        id="email"
-        label="Email"
-        name="email"
-        autoComplete="email"
-        autoFocus
-        value={email}
-        onChange={onChange}
-        variant="outlined"
-      />
-      <TextField
-        margin="normal"
-        required
-        fullWidth
-        name="password"
-        label="Password"
-        type="password"
-        id="password"
-        autoComplete="current-password"
-        value={password}
-        onChange={onChange}
-        variant="outlined"
-      />
-      <Button
+    <form onSubmit={onSubmit} noValidate style={{ marginTop: '8px' }}>
+      {error && <div className="alert alert-error">{error}</div>}
+      
+      <div className="form-group">
+        <label htmlFor="email" className="form-label">Email</label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          required
+          autoComplete="email"
+          autoFocus
+          value={email}
+          onChange={onChange}
+          className="input-field"
+          placeholder="email@example.com"
+        />
+      </div>
+
+      <div className="form-group">
+        <label htmlFor="password" className="form-label">Password</label>
+        <input
+          type="password"
+          id="password"
+          name="password"
+          required
+          autoComplete="current-password"
+          value={password}
+          onChange={onChange}
+          className="input-field"
+          placeholder="••••••••"
+        />
+      </div>
+
+      <button
         type="submit"
-        fullWidth
-        variant="contained"
-        sx={{ mt: 3, mb: 2 }}
+        className="btn btn-primary btn-fullWidth"
+        style={{ marginTop: '24px', marginBottom: '12px' }}
         disabled={loading}
       >
-        {loading ? <CircularProgress size={24} color="inherit" /> : 'Login'}
-      </Button>
-      <Link href="#" variant="body2" sx={{ display: 'block', textAlign: 'center' }}>
+        {loading ? <div className="spinner"></div> : 'Login'}
+      </button>
+
+      <button 
+        type="button" 
+        className="link-center" 
+        onClick={(e) => e.preventDefault()}
+        style={{ border: 'none', background: 'transparent', cursor: 'pointer', width: '100%', fontInherit: 'true' }}
+      >
         Forgot password?
-      </Link>
-    </Box>
+      </button>
+    </form>
   );
 };
 
