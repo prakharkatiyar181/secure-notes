@@ -20,28 +20,45 @@ const AuthPage = () => {
             <Tabs 
                 value={tabIndex} 
                 onChange={handleTabChange}
+                variant="fullWidth"
                 TabIndicatorProps={{ style: { display: 'none' } }}
                 sx={{
+                    width: '220px',
+                    minHeight: 'auto',
                     '& .MuiTabs-flexContainer': {
-                        border: '1px solid #e0e0e0',
+                        border: '1px solid #e2e8f0',
                         borderRadius: '8px',
-                        overflow: 'hidden'
+                        overflow: 'hidden',
+                        bgcolor: '#f8f9fa'
                     }
                 }}
             >
                 <Tab 
                     label="Login" 
                     sx={{ 
-                        borderRight: '1px solid #e0e0e0',
+                        minHeight: 'auto',
+                        height: '38px',
+                        fontWeight: 600,
                         bgcolor: tabIndex === 0 ? 'primary.main' : 'transparent',
-                        color: tabIndex === 0 ? 'white !important' : 'inherit'
+                        color: tabIndex === 0 ? 'white !important' : '#495057 !important',
+                        transition: 'all 0.2s ease',
+                        '&:hover': {
+                            bgcolor: tabIndex === 0 ? 'primary.main' : '#e9ecef',
+                        }
                     }} 
                 />
                 <Tab 
                     label="Register"
                     sx={{ 
+                        minHeight: 'auto',
+                        height: '38px',
+                        fontWeight: 600,
                         bgcolor: tabIndex === 1 ? 'primary.main' : 'transparent',
-                        color: tabIndex === 1 ? 'white !important' : 'inherit'
+                        color: tabIndex === 1 ? 'white !important' : '#495057 !important',
+                        transition: 'all 0.2s ease',
+                        '&:hover': {
+                            bgcolor: tabIndex === 1 ? 'primary.main' : '#e9ecef',
+                        }
                     }}
                 />
             </Tabs>

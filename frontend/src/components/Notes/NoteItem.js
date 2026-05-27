@@ -8,9 +8,8 @@ import DeleteIcon from '@mui/icons-material/Delete';
 const NoteItem = ({ note }) => {
     const dispatch = useDispatch();
     const decryptedContent = decryptNote(note.encrypted_content);
-    // Simple logic to get a title and preview
-    const title = decryptedContent.split(' ').slice(0, 3).join(' ');
-    const preview = decryptedContent.split(' ').slice(3).join(' ');
+    const [title, ...body] = decryptedContent.split('\n');
+    const preview = body.join('\n');
 
 
     return (

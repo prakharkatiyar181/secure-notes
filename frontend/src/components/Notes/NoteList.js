@@ -4,6 +4,7 @@ import { getNotes } from '../../redux/slices/notesSlice';
 import NoteItem from './NoteItem';
 import { decryptNote } from '../../utils/encryption';
 import { Box, CircularProgress, Alert } from '@mui/material';
+import { TransitionGroup, CSSTransition } from 'react-transition-group';
 
 const NoteList = () => {
     const dispatch = useDispatch();
@@ -32,9 +33,17 @@ const NoteList = () => {
 
     return (
         <Box>
-            {filteredNotes.map((note) => (
-                <NoteItem key={note.id} note={note} />
-            ))}
+            <TransitionGroup>
+                {filteredNotes.map((note) => (
+                    <CSSTransition
+                        key={note.id}
+                        timeout={300}
+                        classNames="note"
+                    >
+                        <NoteItem note={note} />
+                    </CSSTransition>
+                ))}
+            </TransitionGroup>
         </Box>
     );
 };
